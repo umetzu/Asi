@@ -19,7 +19,29 @@ namespace Asi.Web.Pages
         [BindProperty]
         public ContactRecord Contact { get; set; } = default!;
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostRow()
+        {
+            List<EmailRecord> emails = Contact.Emails != null ? Contact.Emails.ToList() : new List<EmailRecord>();
+            emails.Add(new EmailRecord());
+
+            Contact = new ContactRecord(Contact.Id, Contact.Name, Contact.BirthDate, emails.ToArray());
+
+            await Task.Delay(1);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnpostLess()
+        {
+            //List<EmailRecord> emails = Contact.Emails != null ? Contact.Emails.ToList() : new List<EmailRecord>();
+            //emails.RemoveAt
+
+            //Contact = new ContactRecord(Contact.Id, Contact.Name, Contact.BirthDate, emails.ToArray());
+
+            await Task.Delay(1);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAllAsync()
         {
             if (!ModelState.IsValid || Contact == null)
             {
