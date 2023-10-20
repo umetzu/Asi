@@ -1,0 +1,75 @@
+﻿@page
+@model EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Contact</h4>
+<hr />
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Contact.Id" />
+            <div class="form-group">
+                <label asp-for="Contact.Name" class="control-label"></label>
+                <input asp-for="Contact.Name" class="form-control" />
+                <span asp-validation-for="Contact.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contact.BirthDate" class="control-label"></label>
+                <input type="date" asp-for=" Contact.BirthDate" class="form-control" />
+                <span asp-validation-for="Contact.BirthDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    @if (Model.Contact.Emails != null && Model.Contact.Emails.Length > 0)
+    {
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Contact.Emails)
+            </dt>
+            <dd class="col-sm-1"></dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Contact.Emails![0].Id)</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Contact.Emails![0].Address)</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Contact.Emails![0].IsPrimary)</dt>
+            @for (int i = 0; i < Model.Contact.Emails.Length; i++)
+            {
+                <dt class="col-sm-3">
+                </dt>
+                <dd class="col-sm-3">
+                    @Html.HiddenFor(model => model.Contact.Emails![i].Id)
+                    <input type="number" disabled="disabled" asp-for="Contact.Emails![i].Id" class="form-control" />
+                </dd>
+                <dd class="col-sm-3">
+                    <input type="email" asp-for="Contact.Emails![i].Address" class="form-control" />
+                    <span asp-validation-for="Contact.Emails![i].Address" class="text-danger"></span>
+                </dd>
+                <dd class="col-sm-3">
+                    <input type="number" max="1" min="0" asp-for="Contact.Emails![i].IsPrimary" class="form-control" />
+                    <span asp-validation-for="Contact.Emails![i].IsPrimary" class="text-danger"></span>
+                </dd>
+            }
+        </dl>
+    }
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
