@@ -14,6 +14,9 @@ namespace Asi.Web.Pages
         [BindProperty]
         public ContactRecord Contact { get; set; } = default!;
 
+        [BindProperty]
+        public int EmailIndex { get; set; } = 0;
+
         public async Task<IActionResult> OnGetAsync(long? id)
         {
             if (id == null)
@@ -30,7 +33,33 @@ namespace Asi.Web.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostRow()
+        {
+            List<EmailRecord> emails = Contact.Emails != null ? Contact.Emails.ToList() : new List<EmailRecord>();
+            emails.Add(new EmailRecord());
+
+            Contact = new ContactRecord(Contact.Id, Contact.Name, Contact.BirthDate, emails.ToArray());
+
+            await Task.Delay(0);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostLess()
+        {
+            if (Contact.Emails != null)
+            {
+                EmailRecord emailRecord = Contact.Emails[EmailIndex];
+                List<EmailRecord> emails = Contact.Emails.ToList();
+                emails.Remove(emailRecord);
+
+                Contact = new ContactRecord(Contact.Id, Contact.Name, Contact.BirthDate, emails.ToArray());
+            }
+
+            await Task.Delay(0);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAllAsync()
         {
             if (!ModelState.IsValid)
             {

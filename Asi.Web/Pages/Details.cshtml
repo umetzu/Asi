@@ -8,7 +8,6 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Contact</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -22,9 +21,13 @@
         </dt>
         <dd class="col-sm-10">
             @Model.Contact.BirthDate?.ToString("yyyy-MM-dd")
-        </dd>        
-        @if (Model.Contact.Emails != null && Model.Contact.Emails.Length > 0)
-        {
+        </dd>
+    </dl>
+    
+    <hr />
+    @if (Model.Contact.Emails != null && Model.Contact.Emails.Length > 0)
+    {
+        <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Contact.Emails)
             </dt>
@@ -47,10 +50,22 @@
                     @Html.DisplayFor(model => email.IsPrimary)
                 </dd>
             }
-        }
-    </dl>
+
+        </dl>
+    }
+    else
+    {
+        <p class="text-center">
+            <em>No registered emails.</em>
+        </p>
+    }
+    <hr />
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Contact?.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+<div class="row">
+    <div class="col ">
+        <a type="button" class="btn btn-outline-primary" asp-page="./Index">Back to List</a>
+    </div>
+    <div class="col flex-row-reverse d-flex">
+        <a type="button" class="btn btn-outline-primary" style="width:90px;" asp-page="./Edit" asp-route-id="@Model.Contact?.Id">Edit</a>
+    </div>
 </div>

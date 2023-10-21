@@ -4,13 +4,22 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<script type="text/javascript">
+    function onSubmitClick(item) {
+        var emailIndex = $(item).data('email-index');
+        document.getElementById("EmailIndex").value = emailIndex;
 
+        document.mainForm.action = item.formAction;
+        document.mainForm.submit();
+
+        return false;
+    }
+</script>
 <h1>Edit</h1>
 
-<h4>Contact</h4>
 <hr />
 
-<form method="post">
+<form name="mainForm" method="post">
     <div class="row">
         <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -20,16 +29,21 @@
                 <input asp-for="Contact.Name" class="form-control" />
                 <span asp-validation-for="Contact.Name" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Contact.BirthDate" class="control-label"></label>
                 <input type="date" asp-for=" Contact.BirthDate" class="form-control" />
                 <span asp-validation-for="Contact.BirthDate" class="text-danger"></span>
             </div>
         </div>
+        <div class="col-md-4 d-flex align-items-end flex-row-reverse">
+            <input type="submit" asp-page-handler="Row" value="Add Email" class="btn btn-primary mt-3" />
+        </div>
     </div>
+    <hr />
     @if (Model.Contact.Emails != null && Model.Contact.Emails.Length > 0)
-    {
-        <hr />
+    {        
         <dl class="row">
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Contact.Emails)
@@ -40,7 +54,7 @@
             <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Contact.Emails![0].IsPrimary)</dt>
             @for (int i = 0; i < Model.Contact.Emails.Length; i++)
             {
-                <dt class="col-sm-3">
+                <dt class="col-sm-2">
                 </dt>
                 <dd class="col-sm-3">
                     @Html.HiddenFor(model => model.Contact.Emails![i].Id)
@@ -54,21 +68,32 @@
                     <input type="number" max="1" min="0" asp-for="Contact.Emails![i].IsPrimary" class="form-control" />
                     <span asp-validation-for="Contact.Emails![i].IsPrimary" class="text-danger"></span>
                 </dd>
+                <dd class="col-sm-1">
+                    <input type="submit" asp-page-handler="Less" onclick="return onSubmitClick(this);"
+                           data-email-index="@i"
+                           value="Remove" class="btn btn-outline-danger" />
+                </dd>
             }
+            <input type="hidden" asp-for="EmailIndex" />
         </dl>
     }
-    <div class="row mt-2">
-        <div class="col-md-4">
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+    else
+    {
+        <p class="text-center">
+            <em>No emails added yet.</em>
+        </p>
+    }
+    <hr />
+
+    <div class="row">
+        <div class="col ">
+            <a type="button" class="btn btn-outline-primary" asp-page="./Index">Back to List</a>
+        </div>
+        <div class="col flex-row-reverse d-flex">
+            <input type="submit" asp-page-handler="All" style="width: 90px;" value="Save" class="btn btn-primary" />
         </div>
     </div>
 </form>
-
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

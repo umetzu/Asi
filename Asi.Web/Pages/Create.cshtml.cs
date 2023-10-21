@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Asi.Common.Services;
 using static Asi.Web.Records;
+using System.Net;
 
 namespace Asi.Web.Pages
 {
@@ -19,6 +20,9 @@ namespace Asi.Web.Pages
         [BindProperty]
         public ContactRecord Contact { get; set; } = default!;
 
+        [BindProperty]
+        public int EmailIndex { get; set; } = 0;
+
         public async Task<IActionResult> OnPostRow()
         {
             List<EmailRecord> emails = Contact.Emails != null ? Contact.Emails.ToList() : new List<EmailRecord>();
@@ -26,18 +30,22 @@ namespace Asi.Web.Pages
 
             Contact = new ContactRecord(Contact.Id, Contact.Name, Contact.BirthDate, emails.ToArray());
 
-            await Task.Delay(1);
+            await Task.Delay(0);
             return Page();
         }
 
-        public async Task<IActionResult> OnpostLess()
+        public async Task<IActionResult> OnPostLess()
         {
-            //List<EmailRecord> emails = Contact.Emails != null ? Contact.Emails.ToList() : new List<EmailRecord>();
-            //emails.RemoveAt
+            if (Contact.Emails != null)
+            {
+                EmailRecord emailRecord = Contact.Emails[EmailIndex];
+                List<EmailRecord> emails = Contact.Emails.ToList();
+                emails.Remove(emailRecord);
 
-            //Contact = new ContactRecord(Contact.Id, Contact.Name, Contact.BirthDate, emails.ToArray());
+                Contact = new ContactRecord(Contact.Id, Contact.Name, Contact.BirthDate, emails.ToArray());
+            }
 
-            await Task.Delay(1);
+            await Task.Delay(0);
             return Page();
         }
 

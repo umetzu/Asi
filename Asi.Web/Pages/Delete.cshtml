@@ -7,9 +7,7 @@
 
 <h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Contact</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -26,9 +24,53 @@
         </dd>
     </dl>
     
+    <hr />
+    @if (Model.Contact.Emails != null && Model.Contact.Emails.Length > 0)
+    {
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Contact.Emails)
+            </dt>
+            <dd class="col-sm-1"></dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Contact.Emails![0].Id)</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Contact.Emails![0].Address)</dt>
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Contact.Emails![0].IsPrimary)</dt>
+            @foreach (Records.EmailRecord email in Model.Contact.Emails)
+            {
+
+                <dt class="col-sm-3">
+                </dt>
+                <dd class="col-sm-3">
+                    @Html.DisplayFor(model => email.Id)
+                </dd>
+                <dd class="col-sm-3">
+                    @Html.DisplayFor(model => email.Address)
+                </dd>
+                <dd class="col-sm-3">
+                    @Html.DisplayFor(model => email.IsPrimary)
+                </dd>
+            }
+
+        </dl>
+        <hr />
+    }
+    else
+    {
+        <p class="text-center">
+            <em>No registered emails.</em>
+        </p>
+    }
+    <hr />
+
     <form method="post">
         <input type="hidden" asp-for="Contact.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <div class="row">
+            <div class="col ">
+                <a type="button" class="btn btn-outline-primary" asp-page="./Index">Back to List</a>
+            </div>
+            <div class="col flex-row-reverse d-flex">
+                <input type="submit" value="Delete" class="btn btn-danger" />
+            </div>
+        </div>
     </form>
 </div>

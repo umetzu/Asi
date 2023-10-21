@@ -5,35 +5,41 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Contacts</h1>
+<br />
 <form method="post">
     <div class="row">
-        <div class="col-8">
+        <div class="col-3 flex-row d-flex align-items-end">
+            <div class="form-group">
+                <label class="control-label"></label>
+                <a type="button" class="btn btn-outline-primary form-control" asp-page="Create">Create New</a>
+            </div>
+        </div>
+        <div class="col-9">
             <div class="row">
-                <div class="col-3">
+                <div class="col d-flex flex-row-reverse">
                     <div class="form-group">
                         <label asp-for="Filter.Name" class="control-label"></label>
                         <input type="text" asp-for="Filter.Name" class="form-control" />
                         <span asp-validation-for="Filter.Name" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-auto d-flex flex-row-reverse">
                     <div class="form-group">
                         <label asp-for="Filter.FromDate" class="control-label"></label>
                         <input type="date" asp-for="Filter.FromDate" class="form-control" />
                         <span asp-validation-for="Filter.FromDate" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-auto d-flex flex-row-reverse">
                     <div class="form-group">
-                        <label asp-for="Filter.FromDate" class="control-label"></label>
+                        <label asp-for="Filter.ToDate" class="control-label"></label>
                         <input type="date" asp-for="Filter.ToDate" class="form-control" />
-                        <span asp-validation-for="Filter.FromDate" class="text-danger"></span>
+                        <span asp-validation-for="Filter.ToDate" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-3">
+                <div class="col-auto d-flex align-items-end flex-row-reverse">
                     <div class="form-group">
-                        <label class="control-label"></label>
                         <input type="submit" value="Search" class="btn btn-primary form-control" />
                     </div>
                 </div>
@@ -41,24 +47,21 @@
         </div>
     </div>
 </form>
-<div class="row mt-2">
-    <div class="col-2">
-        <p>
-            <a asp-page="Create">Create New</a>
-        </p>
-    </div>
-</div>
-
+<br />
+<hr />
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th scope="col" class="col-3">
                 @Html.DisplayNameFor(model => model.Contact[0].Name)
             </th>
-            <th>
+            <th scope="col" class="text-center col-4">
+                Primary Email
+            </th>
+            <th scope="col" class="text-center col-2">
                 @Html.DisplayNameFor(model => model.Contact[0].BirthDate)
             </th>
-            <th></th>
+            <th scope="col" class="col-4"></th>
         </tr>
     </thead>
     <tbody>
@@ -67,13 +70,23 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+                <td class="text-center">
+                @if(item.Emails?.Length > 0 && item.Emails.Any(x => x.IsPrimary == 1))
+                {
+                    @item.Emails.First(x => x.IsPrimary == 1).Address;
+                }
+                else
+                {
+                    <em>none</em>       
+                }
+            </td>
+            <td class="text-center">
                 @item.BirthDate?.ToString("yyyy-MM-dd")
             </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            <td class="text-center">
+                <a type="button" class="btn btn-outline-primary btn-sm" style="width: 90px;" asp-page="./Edit" asp-route-id="@item.Id">Edit</a> 
+                <a type="button" class="btn btn-outline-primary btn-sm mx-1" style="width: 90px;" asp-page="./Details" asp-route-id="@item.Id">Details</a> 
+                <a type="button" class="btn btn-outline-secondary btn-sm" style="width: 90px;" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
